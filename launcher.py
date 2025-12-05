@@ -9,6 +9,8 @@ from tkinter import filedialog, messagebox, ttk, simpledialog
 from collections import defaultdict
 import hashlib
 
+
+#класс жанров, ДОБАВЬ БОЛЬШЕ!!!!
 class GameGenre:
     ACTION = "Экшен"
     RPG = "RPG"
@@ -25,7 +27,7 @@ class Game:
     def __init__(self, name, path, arguments="", genres=None):
         self.name = name
         self.path = path
-        self.arguments = arguments
+        self.arguments = arguments #аргументы запуска вырезать я хз че с ними делать и как
         self.genres = set(genres) if genres else set()
         self.play_count = 0
         self.total_time = 0
@@ -34,7 +36,7 @@ class Game:
         self.game_id = hashlib.md5(f"{name}_{path}".encode()).hexdigest()
     def play(self):
         self.play_count += 1
-        self.last_played = datetime.now()
+        self.last_played = datetime.now() #оно не работает!!!
         self.total_time += 60
     def set_rating(self, rating):
         self.rating = max(1.0, min(5.0, rating))
@@ -46,14 +48,14 @@ class Game:
             self.play()
 
             cmd = [self.path]
-            if self.arguments:
-                cmd.extend(self.arguments.split())
+            #if self.arguments:
+           #     cmd.extend(self.arguments.split())
 
             subprocess.Popen(cmd, cwd=os.path.dirname(self.path))
             return True
         except:
             return False
-
+#список игр забыл описание добавить потом уже
     def to_dict(self):
         return {
             "name": self.name,
@@ -62,7 +64,7 @@ class Game:
             "genres": list(self.genres),
             "play_count": self.play_count,
             "total_time": self.total_time,
-            "last_played": self.last_played.isoformat() if self.last_played else None,
+            # "last_played": self.last_played.isoformat() if self.last_played else None,
             "rating": self.rating,
             "game_id": self.game_id
         }
@@ -78,9 +80,9 @@ class Game:
 
         game.play_count = data.get("play_count", 0)
         game.total_time = data.get("total_time", 0)
-        if data.get("last_played"):
-            game.last_played = datetime.fromisoformat(data["last_played"])
-        game.rating = data.get("rating", 3.0)
+        #if data.get("last_played"):
+        #    game.last_played = datetime.fromisoformat(data["last_played"])
+        game.rating = data.get("rating", 0.0)
         game.game_id = data.get("game_id", game.game_id)
 
         return game
@@ -183,7 +185,7 @@ class GameLauncherApp:
 
     def setup_window(self):
         self.window = tk.Tk()
-        self.window.title("Лаунчер")
+        self.window.title("ManageLauncher")
         self.window.geometry("500x550")
         style = ttk.Style()
         style.theme_use('classic')
@@ -259,7 +261,7 @@ class GameLauncherApp:
     def add_game(self):
         path = filedialog.askopenfilename(
             title="Выберите файл игры",
-            filetypes=[("Игры", "*.exe"), ("Все файлы", "*.*")]
+            filetypes=[("Игры", "*.exe"), ("бубубубуфууубууу", "*.*")]
         )
         if not path:
             return
